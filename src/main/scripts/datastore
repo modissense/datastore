@@ -1,0 +1,12 @@
+#!/bin/bash
+
+JAR_DIRECTORY=/usr/local/lib
+
+if [ "$1" = "kill" ]; then 
+        echo "`date`: killing datastore" >> /tmp/hash_map_stdout.log
+        [ -e "/tmp/datastore_pid" ] && kill `cat /tmp/datastore_pid` && rm /tmp/datastore_pid;
+else
+        echo "`date`: Starting datastore" >> /tmp/hash_map_stdout.log
+        java -cp $JAR_DIRECTORY/datastore.jar datastore.server.PersistentHashMapServer 1 1>>/tmp/hash_map_stdout.log 2>>/tmp/hash_map_stderr.log &
+        echo $! > /tmp/datastore_pid
+fi
